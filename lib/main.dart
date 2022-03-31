@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import './providers/book_provider.dart';
 
 import './screens/home_page.dart';
 
@@ -11,14 +14,24 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Book Store',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        fontFamily: GoogleFonts.montserrat().fontFamily,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => BookProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Book Store',
+        theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+          fontFamily: GoogleFonts.montserrat().fontFamily,
+        ),
+        initialRoute: '/',
+        routes: {
+          HomePage.routName: (ctx) => const HomePage(),
+        },
       ),
-      home: const HomePage(),
     );
   }
 }
