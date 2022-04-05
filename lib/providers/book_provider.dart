@@ -44,4 +44,12 @@ class BookProvider with ChangeNotifier {
   List<BookModel> get list {
     return [..._list];
   }
+
+  List<BookModel> get bestRatingList {
+    return _list.where((book) => book.rating >= 4).toList();
+  }
+
+  List<BookModel> get popularBooksList {
+    return _list.where((book) => book.views >= 100).toList();
+  }
 }

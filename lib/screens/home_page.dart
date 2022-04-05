@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/book_item_tabs.dart';
+
 import '../providers/book_provider.dart';
 
 import '../widgets/app_drawer.dart';
@@ -20,6 +22,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final book = Provider.of<BookProvider>(context);
+    final popularBooks = Provider.of<BookProvider>(context).popularBooksList;
+    final bestRating = Provider.of<BookProvider>(context).bestRatingList;
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
@@ -86,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                               isScrollable: true,
                               labelPadding: EdgeInsets.only(right: 10),
                               tabs: [
-                                Tab(child: Text('For You')),
+                                Tab(child: Text('Best Rating')),
                                 Tab(child: Text('Popular')),
                                 Tab(child: Text('All books')),
                               ],
@@ -106,110 +110,56 @@ class _HomePageState extends State<HomePage> {
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 10,
                                 ),
-                                itemCount: book.list.length,
+                                itemCount: bestRating.length,
                                 itemBuilder: (ctx, index) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          child: Image.network(
-                                            book.list[index].imageUrl,
-                                            width: 120,
-                                            height: 150,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              width: 100,
-                                              child: Text(
-                                                book.list[index].title,
-                                                style: const TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.star,
-                                                      size: 18,
-                                                      color: Color(0xFF6e57d8),
-                                                    ),
-                                                    Text(
-                                                      book.list[index].rating
-                                                          .toString(),
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        color:
-                                                            Color(0xFF6e57d8),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SafeArea(
-                                                    child: SizedBox(width: 20)),
-                                                Container(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 10),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                    color:
-                                                        const Color(0xFFdbd4fd),
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      const Icon(
-                                                        Icons.view_module,
-                                                        size: 18,
-                                                        color:
-                                                            Color(0xFF6e57d8),
-                                                      ),
-                                                      Text(
-                                                        book.list[index].rating
-                                                            .toString(),
-                                                        style: const TextStyle(
-                                                          fontSize: 16,
-                                                          color:
-                                                              Color(0xFF6e57d8),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                  return BookItemTabs(
+                                    title: bestRating[index].title,
+                                    imageUrl: bestRating[index].imageUrl,
+                                    rating: bestRating[index].rating,
+                                    views: bestRating[index].views,
                                   );
                                 },
                               ),
-                              const Text('data1'),
-                              const Text('data2'),
+                              GridView.builder(
+                                scrollDirection: Axis.horizontal,
+                                gridDelegate:
+                                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  mainAxisExtent: 250,
+                                  maxCrossAxisExtent: 230,
+                                  childAspectRatio: 1,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                ),
+                                itemCount: popularBooks.length,
+                                itemBuilder: (ctx, index) {
+                                  return BookItemTabs(
+                                    title: popularBooks[index].title,
+                                    imageUrl: popularBooks[index].imageUrl,
+                                    rating: popularBooks[index].rating,
+                                    views: popularBooks[index].views,
+                                  );
+                                },
+                              ),
+                              GridView.builder(
+                                scrollDirection: Axis.horizontal,
+                                gridDelegate:
+                                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  mainAxisExtent: 250,
+                                  maxCrossAxisExtent: 230,
+                                  childAspectRatio: 1,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                ),
+                                itemCount: book.list.length,
+                                itemBuilder: (ctx, index) {
+                                  return BookItemTabs(
+                                    title: book.list[index].title,
+                                    imageUrl: book.list[index].imageUrl,
+                                    rating: book.list[index].rating,
+                                    views: book.list[index].views,
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ),
