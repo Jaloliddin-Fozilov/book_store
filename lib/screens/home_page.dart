@@ -17,8 +17,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List _pages = [
-    HomeTab(),
-    HomeTab(),
+    const HomeTab(),
+    const HomeTab(),
+    const HomeTab(),
   ];
   int _currentIndex = 0;
 
@@ -56,25 +57,43 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: const AppDrawer(),
       body: _pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        type: BottomNavigationBarType.shifting,
-        currentIndex: _currentIndex,
-        onTap: changeTab,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-            ),
-            label: 'Home',
+      bottomNavigationBar: SizedBox(
+        height: 70,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(30),
+            topLeft: Radius.circular(30),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-            ),
-            label: 'Home',
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.shifting,
+            unselectedItemColor: Colors.grey,
+            currentIndex: _currentIndex,
+            onTap: changeTab,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                ),
+                label: 'Home',
+                backgroundColor: Colors.deepPurple,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.library_books,
+                ),
+                label: 'Books',
+                backgroundColor: Colors.deepPurple,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.settings,
+                ),
+                label: 'Settings',
+                backgroundColor: Colors.deepPurple,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

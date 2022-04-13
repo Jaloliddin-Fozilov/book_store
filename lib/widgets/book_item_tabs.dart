@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../providers/book_provider.dart';
+import '../screens/book_detail_page.dart';
 
 class BookItemTabs extends StatelessWidget {
+  final String id;
   final String title;
   final String imageUrl;
   final int rating;
@@ -10,6 +12,7 @@ class BookItemTabs extends StatelessWidget {
 
   const BookItemTabs({
     Key? key,
+    required this.id,
     required this.title,
     required this.imageUrl,
     required this.rating,
@@ -18,74 +21,58 @@ class BookItemTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BookDetailPage(id: id),
+        ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.network(
-              imageUrl,
-              width: 120,
-              height: 150,
-              fit: BoxFit.cover,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.network(
+                imageUrl,
+                width: 120,
+                height: 150,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          const SizedBox(width: 10),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 100,
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            const SizedBox(width: 10),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              Row(
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.star,
-                        size: 18,
-                        color: Color(0xFF6e57d8),
-                      ),
-                      Text(
-                        rating.toString(),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF6e57d8),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SafeArea(child: SizedBox(width: 20)),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xFFdbd4fd),
-                    ),
-                    child: Row(
+                Row(
+                  children: [
+                    Row(
                       children: [
                         const Icon(
-                          Icons.remove_red_eye,
+                          Icons.star,
                           size: 18,
                           color: Color(0xFF6e57d8),
                         ),
                         Text(
-                          views.toString(),
+                          rating.toString(),
                           style: const TextStyle(
                             fontSize: 16,
                             color: Color(0xFF6e57d8),
@@ -93,12 +80,36 @@ class BookItemTabs extends StatelessWidget {
                         ),
                       ],
                     ),
-                  )
-                ],
-              ),
-            ],
-          ),
-        ],
+                    const SafeArea(child: SizedBox(width: 20)),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xFFdbd4fd),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.remove_red_eye,
+                            size: 18,
+                            color: Color(0xFF6e57d8),
+                          ),
+                          Text(
+                            views.toString(),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF6e57d8),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

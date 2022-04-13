@@ -16,7 +16,7 @@ class HomeTabsBlock extends StatelessWidget {
     final popularBooks = Provider.of<BookProvider>(context).popularBooksList;
     final bestRating = Provider.of<BookProvider>(context).bestRatingList;
     return Container(
-      height: 350,
+      height: 400,
       width: double.infinity,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
@@ -77,6 +77,7 @@ class HomeTabsBlock extends StatelessWidget {
                           itemCount: bestRating.length,
                           itemBuilder: (ctx, index) {
                             return BookItemTabs(
+                              id: bestRating[index].id,
                               title: bestRating[index].title,
                               imageUrl: bestRating[index].imageUrl,
                               rating: bestRating[index].rating,
@@ -97,6 +98,7 @@ class HomeTabsBlock extends StatelessWidget {
                           itemCount: popularBooks.length,
                           itemBuilder: (ctx, index) {
                             return BookItemTabs(
+                              id: popularBooks[index].id,
                               title: popularBooks[index].title,
                               imageUrl: popularBooks[index].imageUrl,
                               rating: popularBooks[index].rating,
@@ -117,6 +119,7 @@ class HomeTabsBlock extends StatelessWidget {
                           itemCount: book.list.length,
                           itemBuilder: (ctx, index) {
                             return BookItemTabs(
+                              id: book.list[index].id,
                               title: book.list[index].title,
                               imageUrl: book.list[index].imageUrl,
                               rating: book.list[index].rating,

@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
           fontFamily: GoogleFonts.montserrat().fontFamily,
+          scaffoldBackgroundColor: Colors.white,
         ),
         initialRoute: '/',
         routes: {

@@ -52,4 +52,8 @@ class BookProvider with ChangeNotifier {
   List<BookModel> get popularBooksList {
     return _list.where((book) => book.views >= 100).toList();
   }
+
+  BookModel singleBook(String id) {
+    return _list.firstWhere((book) => book.id == id);
+  }
 }
