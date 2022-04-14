@@ -12,9 +12,11 @@ class HomeTabsBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final book = Provider.of<BookProvider>(context);
-    final popularBooks = Provider.of<BookProvider>(context).popularBooksList;
-    final bestRating = Provider.of<BookProvider>(context).bestRatingList;
+    final book = Provider.of<BookProvider>(context, listen: false);
+    final popularBooks =
+        Provider.of<BookProvider>(context, listen: false).popularBooksList;
+    final bestRating =
+        Provider.of<BookProvider>(context, listen: false).bestRatingList;
     return Container(
       height: 400,
       width: double.infinity,

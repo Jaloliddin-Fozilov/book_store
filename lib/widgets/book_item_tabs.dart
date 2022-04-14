@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../providers/book_provider.dart';
 import '../screens/book_detail_page.dart';
 
 class BookItemTabs extends StatelessWidget {

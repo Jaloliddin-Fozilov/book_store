@@ -16,4 +16,8 @@ class AuthorProvider with ChangeNotifier {
   List<AuthorModel> get list {
     return [..._list];
   }
+
+  AuthorModel findById(String id) {
+    return _list.firstWhere((author) => author.id == id);
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:book_store/providers/author_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => BookProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AuthorProvider(),
         ),
       ],
       child: MaterialApp(
