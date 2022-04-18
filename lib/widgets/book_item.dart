@@ -8,12 +8,14 @@ class BookItem extends StatelessWidget {
     required this.imageUrl,
     required this.title,
     required this.price,
+    this.textColor = Colors.black,
   }) : super(key: key);
 
   final String id;
   final String imageUrl;
   final String title;
   final double price;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,9 @@ class BookItem extends StatelessWidget {
             ),
             Text(
               title,
+              style: TextStyle(
+                color: textColor,
+              ),
             ),
             const SizedBox(
               height: 5,

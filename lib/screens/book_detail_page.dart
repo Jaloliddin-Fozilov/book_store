@@ -3,6 +3,8 @@ import 'package:book_store/providers/book_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/book_item.dart';
+
 class BookDetailPage extends StatelessWidget {
   final String id;
   const BookDetailPage({
@@ -12,9 +14,9 @@ class BookDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final book =
-        Provider.of<BookProvider>(context, listen: false).singleBook(id);
-    final author = Provider.of<AuthorProvider>(context).findById(id);
+    final book = Provider.of<BookProvider>(context).singleBook(id);
+    final books = Provider.of<BookProvider>(context);
+    final author = Provider.of<AuthorProvider>(context).findById(book.authorId);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -230,6 +232,62 @@ class BookDetailPage extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 30),
+            Container(
+              height: 300,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 24, right: 24, left: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Popular books',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        BookItem(
+                          id: books.list[books.list.length - 3].id,
+                          imageUrl: books.list[books.list.length - 3].imageUrl,
+                          title: books.list[books.list.length - 3].title,
+                          price: books.list[books.list.length - 3].price,
+                          textColor: Colors.white,
+                        ),
+                        BookItem(
+                          id: books.list[books.list.length - 2].id,
+                          imageUrl: books.list[books.list.length - 2].imageUrl,
+                          title: books.list[books.list.length - 2].title,
+                          price: books.list[books.list.length - 2].price,
+                          textColor: Colors.white,
+                        ),
+                        BookItem(
+                          id: books.list[books.list.length - 1].id,
+                          imageUrl: books.list[books.list.length - 1].imageUrl,
+                          title: books.list[books.list.length - 1].title,
+                          price: books.list[books.list.length - 1].price,
+                          textColor: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
