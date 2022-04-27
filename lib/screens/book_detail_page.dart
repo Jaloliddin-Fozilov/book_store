@@ -1,8 +1,9 @@
-import 'package:book_store/providers/author_provider.dart';
-import 'package:book_store/providers/book_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/author_provider.dart';
+import '../providers/book_provider.dart';
+import '../widgets/my_search_delegate.dart';
 import '../widgets/book_item.dart';
 
 class BookDetailPage extends StatelessWidget {
@@ -35,7 +36,12 @@ class BookDetailPage extends StatelessWidget {
               size: 24,
               color: Colors.grey,
             ),
-            onPressed: () {},
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: MySearchDelegete(),
+              );
+            },
           ),
           const SizedBox(width: 5),
         ],

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 import './home_tab.dart';
+import './books_page.dart';
+import 'profile.dart';
 
 import '../widgets/app_drawer.dart';
+import '../widgets/my_search_delegate.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -18,8 +21,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List _pages = [
     const HomeTab(),
-    const HomeTab(),
-    const HomeTab(),
+    const BooksPage(),
+    const Profile(),
   ];
   int _currentIndex = 0;
 
@@ -43,13 +46,20 @@ class _HomePageState extends State<HomePage> {
           ),
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
         ),
+        centerTitle: true,
+        title: const Text('Book Store'),
         actions: [
           IconButton(
             icon: const Icon(
               Icons.search,
               size: 32,
             ),
-            onPressed: () {},
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: MySearchDelegete(),
+              );
+            },
           ),
           const SizedBox(width: 5),
         ],
@@ -86,9 +96,9 @@ class _HomePageState extends State<HomePage> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.settings,
+                  Icons.person,
                 ),
-                label: 'Settings',
+                label: 'Profile',
                 backgroundColor: Colors.deepPurple,
               ),
             ],

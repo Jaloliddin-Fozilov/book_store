@@ -21,7 +21,23 @@ class AppDrawer extends StatelessWidget {
             ),
             const Divider(
               height: 0,
-            )
+            ),
+            ListTile(
+              leading: const Icon(Icons.shopping_cart_outlined),
+              title: const Text('Cart'),
+              onTap: () {},
+            ),
+            const Divider(
+              height: 0,
+            ),
+            ListTile(
+              leading: const Icon(Icons.list_alt),
+              title: const Text('Orders'),
+              onTap: () {},
+            ),
+            const Divider(
+              height: 0,
+            ),
           ],
         ),
       ),
