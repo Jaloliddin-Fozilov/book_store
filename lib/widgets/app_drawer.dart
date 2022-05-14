@@ -17,7 +17,7 @@ class AppDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text('Home'),
-              onTap: () {},
+              onTap: () => Navigator.of(context).pushNamed('/'),
             ),
             const Divider(
               height: 0,
@@ -25,7 +25,7 @@ class AppDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.shopping_cart_outlined),
               title: const Text('Cart'),
-              onTap: () {},
+              onTap: () => Navigator.of(context).pushNamed('/cart'),
             ),
             const Divider(
               height: 0,
@@ -33,7 +33,7 @@ class AppDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.list_alt),
               title: const Text('Orders'),
-              onTap: () {},
+              onTap: () => Navigator.of(context).pushNamed('/orders'),
             ),
             const Divider(
               height: 0,

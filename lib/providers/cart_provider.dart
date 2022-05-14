@@ -15,33 +15,39 @@ class CartProvider with ChangeNotifier {
 
   double get totalPrice {
     var total = 0.0;
-    _items.forEach(
-      (key, cartModel) {
-        total += cartModel.price * cartModel.quantity;
-      },
-    );
+    _items.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+    });
     return total;
+  }
+
+  int quantityProduct(String productId) {
+    final isProductAdded = _items.containsKey(productId);
+    if (!isProductAdded) {
+      return 0;
+    } else {
+      return _items[productId]!.quantity;
+    }
   }
 
   void addToCart(
     String productId,
     String title,
-    String image,
+    String imageUrl,
     double price,
   ) {
     if (_items.containsKey(productId)) {
-      // mahsulot bo'lsa + 1 bo'lish kerak
       _items.update(
         productId,
         (currentProduct) => CartModel(
-            id: currentProduct.id,
-            title: currentProduct.title,
-            quantity: currentProduct.quantity + 1,
-            price: currentProduct.price,
-            imageUrl: currentProduct.imageUrl),
+          id: currentProduct.id,
+          title: currentProduct.title,
+          quantity: currentProduct.quantity + 1,
+          price: currentProduct.price,
+          imageUrl: currentProduct.imageUrl,
+        ),
       );
     } else {
-      // cartga qo'shish kerak
       _items.putIfAbsent(
         productId,
         () => CartModel(
@@ -49,14 +55,14 @@ class CartProvider with ChangeNotifier {
           title: title,
           quantity: 1,
           price: price,
-          imageUrl: image,
+          imageUrl: imageUrl,
         ),
       );
     }
     notifyListeners();
   }
 
-  void removeSingleItem(String productId, {bool isCartButton = false}) {
+  void removeSingleItem(String productId) {
     if (!_items.containsKey(productId)) {
       return;
     }
@@ -71,18 +77,16 @@ class CartProvider with ChangeNotifier {
           imageUrl: currentProduct.imageUrl,
         ),
       );
-    } else if (isCartButton) {
-      _items.remove(productId);
+      notifyListeners();
     }
+  }
+
+  void removeItem(String productId) {
+    _items.remove(productId);
     notifyListeners();
   }
 
-  void removeItem(String id) {
-    _items.remove(id);
-    notifyListeners();
-  }
-
-  void clearItems() {
+  void removeItems() {
     _items.clear();
     notifyListeners();
   }

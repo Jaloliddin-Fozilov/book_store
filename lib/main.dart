@@ -1,11 +1,15 @@
-import 'package:book_store/providers/author_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import './providers/book_provider.dart';
+import './providers/author_provider.dart';
+import './providers/cart_provider.dart';
+import './providers/order_provider.dart';
 
 import './screens/home_page.dart';
+import './screens/cart_screen.dart';
+import './screens/orders_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,6 +27,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => AuthorProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => CartProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => OrderProvider(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -35,6 +45,8 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           HomePage.routName: (ctx) => const HomePage(),
+          CartScreen.routName: (ctx) => const CartScreen(),
+          OrdersScreen.routName: (ctx) => const OrdersScreen(),
         },
       ),
     );
