@@ -198,10 +198,10 @@ class BookDetailPage extends StatelessWidget {
                             children: [
                               Text(
                                 author.name,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                                  fontSize: author.name.length > 5 ? 14 : 18,
                                 ),
                               ),
                               const SizedBox(height: 5),
@@ -235,7 +235,7 @@ class BookDetailPage extends StatelessWidget {
                                   child: Icon(Icons.person_outline),
                                 ),
                                 title: const Text('Followers'),
-                                subtitle: Text('${author.followers}K'),
+                                subtitle: Text(author.followers.toString()),
                               ),
                             ),
                             SizedBox(
@@ -247,7 +247,7 @@ class BookDetailPage extends StatelessWidget {
                                   child: Icon(Icons.person_outline),
                                 ),
                                 title: const Text('Following'),
-                                subtitle: Text('${author.following}K'),
+                                subtitle: Text(author.following.toString()),
                               ),
                             ),
                           ],

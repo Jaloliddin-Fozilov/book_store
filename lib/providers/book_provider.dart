@@ -164,4 +164,8 @@ class BookProvider with ChangeNotifier {
   BookModel singleBook(String id) {
     return _list.firstWhere((book) => book.id == id);
   }
+
+  List<BookModel> authorBook(String authorId) {
+    return _list.where((book) => book.authorId == authorId).toList();
+  }
 }
