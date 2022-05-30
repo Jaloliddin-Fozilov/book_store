@@ -6,6 +6,7 @@ import './providers/book_provider.dart';
 import './providers/author_provider.dart';
 import './providers/cart_provider.dart';
 import './providers/order_provider.dart';
+import './providers/auth.dart';
 
 import './screens/home_page.dart';
 import './screens/cart_screen.dart';
@@ -25,6 +26,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => BookProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Auth(),
         ),
         ChangeNotifierProvider(
           create: (context) => AuthorProvider(),

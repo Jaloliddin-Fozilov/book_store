@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
+
+import '../services/http_expection.dart';
+
+enum AuthMode { Register, Login }
 
 class SignScreen extends StatefulWidget {
   const SignScreen({Key? key}) : super(key: key);
@@ -8,6 +15,96 @@ class SignScreen extends StatefulWidget {
 }
 
 class _SignScreenState extends State<SignScreen> {
+  GlobalKey<FormState> _formKey = GlobalKey();
+  AuthMode _authMode = AuthMode.Login;
+  final _passwordController = TextEditingController();
+
+  var _loading = false;
+
+  Map<String, String> _authData = {
+    'email': '',
+    'password': '',
+  };
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: const Text('Xatolik!'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                setState(() {
+                  _loading = false;
+                });
+              },
+              child: const Text('Okay'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _submit() async {
+    if (_formKey.currentState!.validate()) {
+      // save form
+      _formKey.currentState!.save();
+      setState(() {
+        _loading = true;
+      });
+      try {
+        if (_authMode == AuthMode.Login) {
+          // login user
+          await Provider.of<Auth>(context, listen: false).signin(
+            _authData['email']!,
+            _authData['password']!,
+          );
+          setState(() {
+            _loading = false;
+          });
+        } else {
+          //  register user
+          await Provider.of<Auth>(context, listen: false).signup(
+            _authData['email']!,
+            _authData['password']!,
+          );
+          setState(() {
+            _loading = false;
+          });
+        }
+      } on HttpExpection catch (error) {
+        var errorMessage = 'Kechirasiz xatolik sodir bo\'ldi.';
+        if (error.message.contains('EMAIL_EXISTS')) {
+          errorMessage = 'Bunday email mavjud.';
+        } else if (error.message.contains('EMAIL_NOT_FOUND')) {
+          errorMessage = 'Bunday email topilmadi';
+        } else if (error.message.contains('INVALID_PASSWORD')) {
+          errorMessage = 'Parol notog\'ri';
+        }
+        _showErrorDialog(errorMessage);
+      } catch (e) {
+        var errorMessage =
+            'Kechirasiz xatolik sodir bo\'ldi. Qaytadan urinib ko\'ring';
+        _showErrorDialog(errorMessage);
+      }
+    }
+  }
+
+  void _switchAuthMode() {
+    if (_authMode == AuthMode.Login) {
+      setState(() {
+        _authMode = AuthMode.Register;
+      });
+    } else {
+      setState(() {
+        _authMode = AuthMode.Login;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -15,19 +112,112 @@ class _SignScreenState extends State<SignScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 15),
-                child: Image.network(
-                  'https://download.flaticon.com/download/icon/149071?icon_id=149071&author=159&team=159&keyword=User&pack=148705&style=Flat&style_id=28&format=png&color=%23000000&colored=2&size=512%2C256%2C128%2C64%2C32%2C24%2C16&selection=1&premium=&type=standard&token=03AGdBq24Teo853wgk-qGyH787H5TRqx3A5lnC0zf2bLUoeqjIjl4R8oRuZ9imdEiaqRGlcqPlP1m2SOzijEQKPQs1TjqGPQC4rUXBNPpjn7eddmgcSd7tZkoE3gC4F9SvLfAkkG-3OTnFxqQfFbKtkEuyrAARWieRMyeFFmxSI56mrlZ1AECS_GSgVuJB_nIeOtpfzRRrOh0N0dkzathbr59SfcU6FgHvVIlaEkuT8kSz3ddU3arHvUB2WCcg7AbcAmUfNcakXYT6s4HOXQzt_MdvwcU0u_4q8ntAyied8yPLooWUZPu3pZCCyiSU9dsfOtoKt2esX8FlwbY4RShCinJD7PisL0OnQaz6-yCeXwMcjTVfRKLo6bogQDd0ZHUW8fRGX9sEABx3EIKG7ZoHLmF8qNXe72Vw2PS-KXhbyBu1wiY7SNOxPzjYAIi_NqQB3VkzO7HR0XJMHhv253PCTtJ_Yy3oPJyUIGR6C19-Zbxzzp6R531XOn1eauGsfpnBt0VF3gf18vG2-f45qKHzG56kzpRYNDZkowJC9GL8vqgmxXy5wphomWcUIGF3BfALhUSJqLr_5RNNoQ_z4-xgpanjbHD8p8OzrR42YypYRbQe6oL1inPELH0aZ_rrPJl85mL0sr-_-doPxtyhZzM3xFQoSPT9IXPGsNdnvG6_MoSNwl3b9V63mDdNncj3mO5sfQaH43gX2iOf3uISkfjHlOPbyFEZynxVkWodteOn9IXjYTU4nza-0um114KodBX6rjDxAlErkuj80NJhEGypZkzr0C-2EAPCJzKZs6xBDQGhsrt2Pbr68jJFuDgrfbMhWOonIdHCwhjJbRh5uqP7ejxwzP7_1UuM8gfNlPVcsw_6lJjPLYY9o1dy2aG0bt80K1eBIS5Xy3rQsHCx6e4TaejaTkk-vZELKiPbJ0o26CXETvyAZOM0ofDltsHgsZSnDNYHS0fcfMs3VTOqestHK-jRiE-cn_9S45IWMfdoVPYWCRg5gwt0QRgQKDaxW6iPViLCuL-an4bhw4TUKaW-bnI9GLJnLFps3UPrxIzI9JQKOZfRnKkroIHVVieXmyfO-VBnfutASlwv76PHbL56zuWOjIgNRnUReyYP1PsAtc9qAIqZfeLSLVGIXrT5XZNrQZ9lpBt3PlSjJ4aNssp6JGSLhElYHTu1mLWGli5Q9ERNV-DTbaWbCz3zSMr9lbxfTGDZQkdKzZFM&search=profile&_gl=1*go3hug*test_ga*NTcwNzMzNTUwLjE2NTM0OTMwNjA.*test_ga_523JXC6VL7*MTY1MzQ5MzA2MC4xLjEuMTY1MzQ5MzA3OS40MQ..*fp_ga*NTcwNzMzNTUwLjE2NTM0OTMwNjA.*fp_ga_1ZY8468CQB*MTY1MzQ5MzA2MC4xLjEuMTY1MzQ5MzA3OS40MQ..',
-                  fit: BoxFit.cover,
-                  width: 75,
-                  height: 75,
-                ),
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Image.network(
+              'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+              fit: BoxFit.cover,
+              width: 75,
+              height: 75,
+            ),
+          ),
+          Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 70, left: 20, right: 20),
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Email manzil',
+                    ),
+                    validator: (email) {
+                      if (email == null || email.isEmpty) {
+                        return 'Iltimos email manzil kiriting';
+                      } else if (!email.contains('@')) {
+                        return 'Iltimos, to\'g\'ri email kiriting';
+                      }
+                    },
+                    onSaved: (email) {
+                      _authData['email'] = email!;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Parol',
+                    ),
+                    validator: (password) {
+                      if (password == null || password.isEmpty) {
+                        return 'Parolni kiriting';
+                      } else if (password.length < 6) {
+                        return 'Parol 5ta symbol ko\'p bo\'lishi kerak';
+                      }
+                    },
+                    controller: _passwordController,
+                    onSaved: (password) {
+                      _authData['password'] = password!;
+                    },
+                    obscureText: true,
+                  ),
+                  if (_authMode == AuthMode.Register)
+                    Column(
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Parolni tasdiqlang',
+                          ),
+                          obscureText: true,
+                          validator: (confirmedPassword) {
+                            if (_passwordController.text != confirmedPassword) {
+                              return 'Iltimos, parolingizni to\'g\'ri kiting.';
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  const SizedBox(
+                    height: 60,
+                  ),
+                  _loading
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: () => _submit(),
+                          child: Text(
+                            _authMode == AuthMode.Login
+                                ? 'KIRISH'
+                                : 'RO\'YXATDAN O\'TISH',
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                              minimumSize: const Size(double.infinity, 50)),
+                        ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextButton(
+                    onPressed: _switchAuthMode,
+                    child: Text(
+                      _authMode == AuthMode.Login
+                          ? 'RO\'YXATDAN O\'TISH'
+                          : 'KIRISH',
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ],
       ),
