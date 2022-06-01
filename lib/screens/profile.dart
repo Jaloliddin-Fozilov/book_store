@@ -21,9 +21,9 @@ class Profile extends StatelessWidget {
                 future: authdata.autoLogin(),
                 builder: (c, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SignScreen();
-                  } else {
                     return ProfileScreen(authorId: author.id);
+                  } else {
+                    return const SignScreen();
                   }
                 },
               );

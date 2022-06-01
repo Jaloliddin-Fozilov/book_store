@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import './home_tab.dart';
 import './books_page.dart';
 import 'profile.dart';
+
+import '../providers/auth.dart';
 
 import '../widgets/app_drawer.dart';
 import '../widgets/my_search_delegate.dart';
@@ -34,6 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<Auth>(context);
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
@@ -66,7 +70,7 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
       ),
       drawer: const AppDrawer(),
-      body: _pages[_currentIndex],
+      body: auth.isAuth ? _pages[_currentIndex] : _pages[2],
       bottomNavigationBar: SizedBox(
         height: 70,
         child: ClipRRect(

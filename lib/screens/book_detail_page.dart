@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../providers/author_provider.dart';
 import '../providers/cart_provider.dart';
 import '../providers/book_provider.dart';
+import '../providers/auth.dart';
+
 import '../widgets/my_search_delegate.dart';
 import '../widgets/book_item.dart';
 
@@ -20,6 +22,7 @@ class BookDetailPage extends StatelessWidget {
     final books = Provider.of<BookProvider>(context);
     final author = Provider.of<AuthorProvider>(context).findById(book.authorId);
     final cart = Provider.of<CartProvider>(context, listen: false);
+    final auth = Provider.of<Auth>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -136,25 +139,32 @@ class BookDetailPage extends StatelessWidget {
                               ),
                             ),
                             ElevatedButton(
-                              onPressed: () {
-                                cart.addToCart(
-                                  book.id,
-                                  book.title,
-                                  book.imageUrl,
-                                  book.price,
-                                );
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content:
-                                        Text('${book.title} added to cart'),
-                                    action: SnackBarAction(
-                                      label: 'Go to cart',
-                                      onPressed: () => Navigator.of(context)
-                                          .pushNamed('/cart'),
-                                    ),
-                                  ),
-                                );
-                              },
+                              onPressed: auth.isAuth
+                                  ? () {
+                                      cart.addToCart(
+                                        book.id,
+                                        book.title,
+                                        book.imageUrl,
+                                        book.price,
+                                      );
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              '${book.title} added to cart'),
+                                          action: SnackBarAction(
+                                            label: 'Go to cart',
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pushNamed('/cart'),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  : () {
+                                      Navigator.of(context).pushNamed('/');
+                                    },
                               child: Padding(
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
