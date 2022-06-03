@@ -18,7 +18,7 @@ class BookDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final book = Provider.of<BookProvider>(context).singleBook(id);
+    final book = Provider.of<BookProvider>(context).findById(id);
     final books = Provider.of<BookProvider>(context);
     final author = Provider.of<AuthorProvider>(context).findById(book.authorId);
     final cart = Provider.of<CartProvider>(context, listen: false);

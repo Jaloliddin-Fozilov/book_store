@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../models/cart_model.dart';
 
@@ -15,54 +15,47 @@ class CartProvider with ChangeNotifier {
 
   double get totalPrice {
     var total = 0.0;
-    _items.forEach((key, cartItem) {
-      total += cartItem.price * cartItem.quantity;
-    });
+    _items.forEach(
+      (key, cartItem) {
+        total += cartItem.price * cartItem.quantity;
+      },
+    );
     return total;
-  }
-
-  int quantityProduct(String productId) {
-    final isProductAdded = _items.containsKey(productId);
-    if (!isProductAdded) {
-      return 0;
-    } else {
-      return _items[productId]!.quantity;
-    }
   }
 
   void addToCart(
     String productId,
     String title,
-    String imageUrl,
+    String image,
     double price,
   ) {
     if (_items.containsKey(productId)) {
+      // mahsulot bo'lsa + 1 bo'lish kerak
       _items.update(
         productId,
         (currentProduct) => CartModel(
-          id: currentProduct.id,
-          title: currentProduct.title,
-          quantity: currentProduct.quantity + 1,
-          price: currentProduct.price,
-          imageUrl: currentProduct.imageUrl,
-        ),
+            id: currentProduct.id,
+            title: currentProduct.title,
+            quantity: currentProduct.quantity + 1,
+            price: currentProduct.price,
+            imageUrl: currentProduct.imageUrl),
       );
     } else {
+      // cartga qo'shish kerak
       _items.putIfAbsent(
         productId,
         () => CartModel(
-          id: UniqueKey().toString(),
-          title: title,
-          quantity: 1,
-          price: price,
-          imageUrl: imageUrl,
-        ),
+            id: UniqueKey().toString(),
+            title: title,
+            quantity: 1,
+            price: price,
+            imageUrl: image),
       );
     }
     notifyListeners();
   }
 
-  void removeSingleItem(String productId) {
+  void removeSingleItem(String productId, {bool isCartButton = false}) {
     if (!_items.containsKey(productId)) {
       return;
     }
@@ -77,16 +70,18 @@ class CartProvider with ChangeNotifier {
           imageUrl: currentProduct.imageUrl,
         ),
       );
-      notifyListeners();
+    } else if (isCartButton) {
+      _items.remove(productId);
     }
-  }
-
-  void removeItem(String productId) {
-    _items.remove(productId);
     notifyListeners();
   }
 
-  void removeItems() {
+  void removeItem(String id) {
+    _items.remove(id);
+    notifyListeners();
+  }
+
+  void clearItems() {
     _items.clear();
     notifyListeners();
   }

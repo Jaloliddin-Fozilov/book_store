@@ -17,13 +17,13 @@ class OrdersScreen extends StatelessWidget {
         title: const Text('Orders'),
       ),
       body: ListView.builder(
-        itemCount: order.list.length,
+        itemCount: order.items.length,
         itemBuilder: (ctx, index) {
           return ExpansionTile(
             title: Text(
-              'ID: ${order.list[index].id} Date: ${order.list[index].date.year}-${order.list[index].date.month}-${order.list[index].date.day} Total price: ${order.list[index].totalPrice}',
+              'Date: ${order.items[index].date.year}-${order.items[index].date.month}-${order.items[index].date.day} Total price: ${order.items[index].totalPrice}',
             ),
-            children: order.list[index].books.map(
+            children: order.items[index].books.map(
               (book) {
                 return ListTile(
                   leading: Image.network(book.imageUrl),

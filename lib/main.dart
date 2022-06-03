@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
           OrdersScreen.routName: (ctx) => const OrdersScreen(),
           EditProfileScreen.routName: (ctx) => const EditProfileScreen(),
           DashboardScreen.routName: (ctx) => const DashboardScreen(),
+          EditProfileScreen.routName: (ctx) => const EditProfileScreen(),
         },
       ),
     );

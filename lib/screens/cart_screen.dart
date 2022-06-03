@@ -19,7 +19,7 @@ class CartScreen extends StatelessWidget {
         title: const Text('Cart'),
         actions: [
           IconButton(
-            onPressed: () => cart.removeItems(),
+            onPressed: () => cart.clearItems(),
             icon: const Icon(
               Icons.clear_all,
             ),
@@ -133,11 +133,11 @@ class CartScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: cart.items.values.isNotEmpty
                       ? () {
-                          order.addToOrder(
+                          order.addToOrders(
                             cart.items.values.toList(),
                             cart.totalPrice,
                           );
-                          cart.removeItems();
+                          cart.clearItems();
                           Navigator.of(context).pushNamed('/orders');
                         }
                       : null,

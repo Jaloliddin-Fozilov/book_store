@@ -1,156 +1,145 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../models/book_model.dart';
+import '../services/http_expection.dart';
 
 class BookProvider with ChangeNotifier {
-  List<BookModel> _list = [
-    BookModel(
-      id: '1',
-      title: 'The Wonderful Adventures',
-      description:
-          'Imagine you fall asleep today and wake up in three hundred years! That\'s the story of Phra, the Phoenician, who has a rare gift of death-like sleep which makes him almost immortal. A reader gets introduced to Phra, a traveling Phoenician warrior, as he saves a slave girl, falls in love with her, and decides to bring her back home to Britannia. From there starts his incredible life journey through different eras of British history, ending up in the Elizabethan age. Each of his long periods of sleep relates to an invasion. For the first time, it happens during Caesar\'s invasion of Britain. ',
-      price: 12.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80',
-      authorId: '1',
-      rating: 4,
-      views: 134,
-    ),
-    BookModel(
-      id: '2',
-      title: 'A School Story for Boys',
-      description:
-          'Salmon\'s House, to which division of Deepwater College Jack Symonds and his study-mates belonged, was famous for its exclusive set of youngsters—a band who had clubbed together for their own advancement, and the confusion of everybody else, and had named themselves the Crees. It amounted in the long run to a sort of secret society; it had its president, but no one outside its numbers knew who he was. It was never known for certain who the members were, either; and that gave a delightful uncertainty to everything connected with it.',
-      price: 18.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1476275466078-4007374efbbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=829&q=80',
-      authorId: '1',
-      rating: 5,
-      views: 100,
-    ),
-    BookModel(
-      id: '3',
-      title: 'Programming Fundamentals',
-      description:
-          'This textbook on Programming Fundamentals is structured around a modular approach using C++.  It mostly covers Modular/Sturctured college course. ',
-      price: 10.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1491841573634-28140fc7ced7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      authorId: '1',
-      rating: 3,
-      views: 40,
-    ),
-    BookModel(
-      id: '1',
-      title: 'The Wonderful Adventures',
-      description:
-          'Imagine you fall asleep today and wake up in three hundred years! That\'s the story of Phra, the Phoenician, who has a rare gift of death-like sleep which makes him almost immortal. A reader gets introduced to Phra, a traveling Phoenician warrior, as he saves a slave girl, falls in love with her, and decides to bring her back home to Britannia. From there starts his incredible life journey through different eras of British history, ending up in the Elizabethan age. Each of his long periods of sleep relates to an invasion. For the first time, it happens during Caesar\'s invasion of Britain. ',
-      price: 12.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80',
-      authorId: '1',
-      rating: 4,
-      views: 134,
-    ),
-    BookModel(
-      id: '2',
-      title: 'A School Story for Boys',
-      description:
-          'Salmon\'s House, to which division of Deepwater College Jack Symonds and his study-mates belonged, was famous for its exclusive set of youngsters—a band who had clubbed together for their own advancement, and the confusion of everybody else, and had named themselves the Crees. It amounted in the long run to a sort of secret society; it had its president, but no one outside its numbers knew who he was. It was never known for certain who the members were, either; and that gave a delightful uncertainty to everything connected with it.',
-      price: 18.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1476275466078-4007374efbbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=829&q=80',
-      authorId: '1',
-      rating: 5,
-      views: 100,
-    ),
-    BookModel(
-      id: '3',
-      title: 'Programming Fundamentals',
-      description:
-          'This textbook on Programming Fundamentals is structured around a modular approach using C++.  It mostly covers Modular/Sturctured college course. ',
-      price: 10.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1491841573634-28140fc7ced7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      authorId: '1',
-      rating: 3,
-      views: 40,
-    ),
-    BookModel(
-      id: '1',
-      title: 'The Wonderful Adventures',
-      description:
-          'Imagine you fall asleep today and wake up in three hundred years! That\'s the story of Phra, the Phoenician, who has a rare gift of death-like sleep which makes him almost immortal. A reader gets introduced to Phra, a traveling Phoenician warrior, as he saves a slave girl, falls in love with her, and decides to bring her back home to Britannia. From there starts his incredible life journey through different eras of British history, ending up in the Elizabethan age. Each of his long periods of sleep relates to an invasion. For the first time, it happens during Caesar\'s invasion of Britain. ',
-      price: 12.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80',
-      authorId: '1',
-      rating: 4,
-      views: 134,
-    ),
-    BookModel(
-      id: '2',
-      title: 'A School Story for Boys',
-      description:
-          'Salmon\'s House, to which division of Deepwater College Jack Symonds and his study-mates belonged, was famous for its exclusive set of youngsters—a band who had clubbed together for their own advancement, and the confusion of everybody else, and had named themselves the Crees. It amounted in the long run to a sort of secret society; it had its president, but no one outside its numbers knew who he was. It was never known for certain who the members were, either; and that gave a delightful uncertainty to everything connected with it.',
-      price: 18.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1476275466078-4007374efbbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=829&q=80',
-      authorId: '1',
-      rating: 5,
-      views: 100,
-    ),
-    BookModel(
-      id: '3',
-      title: 'Programming Fundamentals',
-      description:
-          'This textbook on Programming Fundamentals is structured around a modular approach using C++.  It mostly covers Modular/Sturctured college course. ',
-      price: 10.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1491841573634-28140fc7ced7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      authorId: '1',
-      rating: 3,
-      views: 40,
-    ),
-    BookModel(
-      id: '1',
-      title: 'The Wonderful Adventures',
-      description:
-          'Imagine you fall asleep today and wake up in three hundred years! That\'s the story of Phra, the Phoenician, who has a rare gift of death-like sleep which makes him almost immortal. A reader gets introduced to Phra, a traveling Phoenician warrior, as he saves a slave girl, falls in love with her, and decides to bring her back home to Britannia. From there starts his incredible life journey through different eras of British history, ending up in the Elizabethan age. Each of his long periods of sleep relates to an invasion. For the first time, it happens during Caesar\'s invasion of Britain. ',
-      price: 12.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80',
-      authorId: '1',
-      rating: 4,
-      views: 134,
-    ),
-    BookModel(
-      id: '2',
-      title: 'A School Story for Boys',
-      description:
-          'Salmon\'s House, to which division of Deepwater College Jack Symonds and his study-mates belonged, was famous for its exclusive set of youngsters—a band who had clubbed together for their own advancement, and the confusion of everybody else, and had named themselves the Crees. It amounted in the long run to a sort of secret society; it had its president, but no one outside its numbers knew who he was. It was never known for certain who the members were, either; and that gave a delightful uncertainty to everything connected with it.',
-      price: 18.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1476275466078-4007374efbbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=829&q=80',
-      authorId: '1',
-      rating: 5,
-      views: 100,
-    ),
-    BookModel(
-      id: '3',
-      title: 'Programming Fundamentals',
-      description:
-          'This textbook on Programming Fundamentals is structured around a modular approach using C++.  It mostly covers Modular/Sturctured college course. ',
-      price: 10.0,
-      imageUrl:
-          'https://images.unsplash.com/photo-1491841573634-28140fc7ced7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      authorId: '1',
-      rating: 3,
-      views: 40,
-    ),
-  ];
+  List<BookModel> _list = [];
+
+  String? _authToken;
+  String? _userId;
+
+  void setParams(String? authToken, String? userId) {
+    _authToken = authToken;
+    _userId = userId;
+  }
+
   List<BookModel> get list {
     return [..._list];
+  }
+
+  Future<void> getProductsFromFirebase([bool filterByUser = false]) async {
+    final filterString =
+        filterByUser ? 'orderBy="authorId"&equalTo="$_userId"' : '';
+    final url = Uri.parse(
+        'https://book-store-marketplace-default-rtdb.firebaseio.com/products.json?auth=$_authToken&$filterString');
+    try {
+      final response = await http.get(url);
+      if (jsonDecode(response.body) != null) {
+        final favoriteUrl = Uri.parse(
+            'https://book-store-marketplace-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
+        final favoriteResponse = await http.get(favoriteUrl);
+        final favoriteData = jsonDecode(favoriteResponse.body);
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final List<BookModel> loadedProducts = [];
+        data.forEach(
+          (productId, productData) {
+            loadedProducts.add(
+              BookModel(
+                id: productId,
+                title: productData['title'],
+                description: productData['description'],
+                price: double.parse(productData['price'].toString()),
+                imageUrl: productData['imageUrl'],
+                authorId: productData['authorId'],
+                rating: int.parse(productData['rating']),
+              ),
+            );
+          },
+        );
+
+        _list = loadedProducts;
+        notifyListeners();
+      }
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> addProduct(BookModel books) async {
+    final url = Uri.parse(
+        'https://book-store-marketplace-default-rtdb.firebaseio.com/products.json?auth=$_authToken');
+
+    try {
+      final response = await http.post(
+        url,
+        body: jsonEncode(
+          {
+            'title': books.title,
+            'description': books.description,
+            'price': books.price,
+            'imageUrl': books.imageUrl,
+            'authorId': _userId,
+            'rating': books.rating,
+          },
+        ),
+      );
+      final name = (jsonDecode(response.body) as Map<String, dynamic>)['name'];
+      final newProduct = BookModel(
+        id: name,
+        title: books.title,
+        description: books.description,
+        price: books.price,
+        imageUrl: books.imageUrl,
+        authorId: books.authorId,
+        rating: books.rating,
+      );
+      _list.add(newProduct);
+      notifyListeners();
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateProduct(BookModel updatedProduct) async {
+    final productIndex =
+        _list.indexWhere((books) => books.id == updatedProduct.id);
+    if (productIndex >= 0) {
+      final url = Uri.parse(
+          'https://book-store-marketplace-default-rtdb.firebaseio.com/products/${updatedProduct.id}.json?auth=$_authToken');
+      try {
+        await http.patch(
+          url,
+          body: jsonEncode(
+            {
+              'title': updatedProduct.title,
+              'description': updatedProduct.description,
+              'price': updatedProduct.price,
+              'imageUrl': updatedProduct.imageUrl,
+            },
+          ),
+        );
+
+        _list[productIndex] = updatedProduct;
+        notifyListeners();
+      } catch (e) {
+        rethrow;
+      }
+    }
+  }
+
+  Future<void> deleteProduct(String id) async {
+    final url = Uri.parse(
+        'https://book-store-marketplace-default-rtdb.firebaseio.com/products/$id.json?auth=$_authToken');
+    try {
+      var deletingProduct = _list.firstWhere((books) => books.id == id);
+      final productIndex = _list.indexWhere((books) => books.id == id);
+      _list.removeWhere((books) => books.id == id);
+      notifyListeners();
+
+      final respone = await http.delete(url);
+      if (respone.statusCode >= 400) {
+        _list.insert(productIndex, deletingProduct);
+        notifyListeners();
+        throw HttpExpection('Kechirasiz, mahsulot o\'chirishda xatolik');
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   List<BookModel> get bestRatingList {
@@ -161,8 +150,10 @@ class BookProvider with ChangeNotifier {
     return _list.where((book) => book.views >= 100).toList();
   }
 
-  BookModel singleBook(String id) {
-    return _list.firstWhere((book) => book.id == id);
+  BookModel findById(String productId) {
+    return _list.firstWhere(
+      (books) => books.id == productId,
+    );
   }
 
   List<BookModel> authorBook(String authorId) {
