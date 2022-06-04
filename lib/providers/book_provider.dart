@@ -29,10 +29,6 @@ class BookProvider with ChangeNotifier {
     try {
       final response = await http.get(url);
       if (jsonDecode(response.body) != null) {
-        final favoriteUrl = Uri.parse(
-            'https://book-store-marketplace-default-rtdb.firebaseio.com/userFavorites/$_userId.json?auth=$_authToken');
-        final favoriteResponse = await http.get(favoriteUrl);
-        final favoriteData = jsonDecode(favoriteResponse.body);
         final data = jsonDecode(response.body) as Map<String, dynamic>;
         final List<BookModel> loadedProducts = [];
         data.forEach(
@@ -60,37 +56,48 @@ class BookProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addProduct(BookModel books) async {
+  Future<void> addProduct(BookModel book) async {
     final url = Uri.parse(
         'https://book-store-marketplace-default-rtdb.firebaseio.com/products.json?auth=$_authToken');
 
     try {
+      print(jsonEncode(
+        {
+          'title': book.title,
+          'description': book.description,
+          'price': book.price,
+          'imageUrl': book.imageUrl,
+          'authorId': book.authorId,
+          'rating': book.rating,
+        },
+      ));
       final response = await http.post(
         url,
         body: jsonEncode(
           {
-            'title': books.title,
-            'description': books.description,
-            'price': books.price,
-            'imageUrl': books.imageUrl,
-            'authorId': _userId,
-            'rating': books.rating,
+            'title': book.title,
+            'description': book.description,
+            'price': book.price,
+            'imageUrl': book.imageUrl,
+            'authorId': book.authorId,
+            'rating': book.rating,
           },
         ),
       );
       final name = (jsonDecode(response.body) as Map<String, dynamic>)['name'];
       final newProduct = BookModel(
         id: name,
-        title: books.title,
-        description: books.description,
-        price: books.price,
-        imageUrl: books.imageUrl,
-        authorId: books.authorId,
-        rating: books.rating,
+        title: book.title,
+        description: book.description,
+        price: book.price,
+        imageUrl: book.imageUrl,
+        authorId: book.authorId,
+        rating: book.rating,
       );
       _list.add(newProduct);
       notifyListeners();
     } catch (error) {
+      print(error);
       rethrow;
     }
   }
@@ -110,6 +117,7 @@ class BookProvider with ChangeNotifier {
               'description': updatedProduct.description,
               'price': updatedProduct.price,
               'imageUrl': updatedProduct.imageUrl,
+              'rating': updatedProduct.rating,
             },
           ),
         );

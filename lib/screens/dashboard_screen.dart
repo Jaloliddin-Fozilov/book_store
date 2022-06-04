@@ -17,7 +17,7 @@ class DashboardScreen extends StatelessWidget {
         title: const Text('Dashboard'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.of(context).pushNamed('/edit-product'),
             icon: const Icon(
               Icons.add,
             ),

@@ -129,6 +129,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           await showDialog<Null>(
             context: context,
             builder: (ctx) {
+              print(error.toString());
               return AlertDialog(
                 title: const Text('Xatolik!'),
                 content:
@@ -280,6 +281,36 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             imageUrl: _product.imageUrl,
                             authorId: _product.authorId,
                             rating: _product.rating,
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        initialValue: _product.rating == 0
+                            ? ''
+                            : _product.price.toStringAsFixed(2),
+                        decoration: const InputDecoration(
+                          labelText: 'Reyting',
+                          border: OutlineInputBorder(),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Iltimos mahsulot reytingini kiriting.';
+                          } else if (int.parse(value) < 0 ||
+                              int.parse(value) > 5) {
+                            return 'Mahsulot reytingi 0dan katta 5dan kichik bo\'lishi kerak';
+                          }
+                        },
+                        onSaved: (newValue) {
+                          _product = BookModel(
+                            id: _product.id,
+                            title: _product.title,
+                            description: _product.description,
+                            price: _product.price,
+                            imageUrl: _product.imageUrl,
+                            authorId: _product.authorId,
+                            rating: int.parse(newValue!),
                           );
                         },
                       ),

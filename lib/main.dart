@@ -13,6 +13,7 @@ import './screens/cart_screen.dart';
 import './screens/orders_screen.dart';
 import './screens/edit_profile_screen.dart';
 import './screens/dashboard_screen.dart';
+import './screens/edit_product_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
           OrdersScreen.routName: (ctx) => const OrdersScreen(),
           EditProfileScreen.routName: (ctx) => const EditProfileScreen(),
           DashboardScreen.routName: (ctx) => const DashboardScreen(),
-          EditProfileScreen.routName: (ctx) => const EditProfileScreen(),
+          EditProductScreen.routName: (ctx) => const EditProductScreen(),
         },
       ),
     );
