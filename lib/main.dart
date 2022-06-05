@@ -26,10 +26,12 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => BookProvider(),
-        ),
-        ChangeNotifierProvider(
           create: (ctx) => Auth(),
+        ),
+        ChangeNotifierProxyProvider<Auth, BookProvider>(
+          create: (ctx) => BookProvider(),
+          update: (ctx, auth, previousProducts) =>
+              previousProducts!..setParams(auth.token, auth.userId),
         ),
         ChangeNotifierProvider(
           create: (context) => AuthorProvider(),
