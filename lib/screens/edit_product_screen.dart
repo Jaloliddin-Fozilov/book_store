@@ -129,7 +129,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
           await showDialog<Null>(
             context: context,
             builder: (ctx) {
-              print(error.toString());
               return AlertDialog(
                 title: const Text('Xatolik!'),
                 content:

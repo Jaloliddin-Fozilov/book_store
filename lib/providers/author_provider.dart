@@ -1,8 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import '../services/http_expection.dart';
 
 import '../models/author_model.dart';
 
 class AuthorProvider with ChangeNotifier {
+  String? _authToken;
+  String? _userId;
+
+  void setParams(String? authToken, String? userId) {
+    _authToken = authToken;
+    _userId = userId;
+  }
+
   List<AuthorModel> _list = [
     AuthorModel(
       id: '1',
@@ -16,6 +29,43 @@ class AuthorProvider with ChangeNotifier {
   ];
   List<AuthorModel> get list {
     return [..._list];
+  }
+
+  Future<void> addAuthor(AuthorModel author) async {
+    print('$author ppppppppppppppp');
+    final url = Uri.parse(
+        'https://book-store-marketplace-default-rtdb.firebaseio.com/authors.json?auth=$_authToken');
+
+    try {
+      final response = await http.post(
+        url,
+        body: jsonEncode(
+          {
+            'id': author.id,
+            'name': author.name,
+            'imageUrl': author.imageUrl,
+            'email': author.email,
+            'followers': author.followers,
+            'following': author.following,
+          },
+        ),
+      );
+      print(response.body);
+      final newAuthor = AuthorModel(
+        id: author.id,
+        name: author.name,
+        imageUrl: author.imageUrl,
+        email: author.email,
+        followers: author.followers,
+        following: author.following,
+      );
+      _list.add(newAuthor);
+      print('$_list llllllllllllllllllllll');
+      notifyListeners();
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
   }
 
   AuthorModel findById(String id) {
