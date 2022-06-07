@@ -61,16 +61,6 @@ class BookProvider with ChangeNotifier {
         'https://book-store-marketplace-default-rtdb.firebaseio.com/products.json?auth=$_authToken');
 
     try {
-      print(jsonEncode(
-        {
-          'title': book.title,
-          'description': book.description,
-          'price': book.price,
-          'imageUrl': book.imageUrl,
-          'authorId': book.authorId,
-          'rating': book.rating,
-        },
-      ));
       final response = await http.post(
         url,
         body: jsonEncode(
@@ -79,12 +69,11 @@ class BookProvider with ChangeNotifier {
             'description': book.description,
             'price': book.price,
             'imageUrl': book.imageUrl,
-            'authorId': book.authorId,
+            'authorId': _userId.toString(),
             'rating': book.rating,
           },
         ),
       );
-      print('${response.body} 2222222222222');
       final name = (jsonDecode(response.body) as Map<String, dynamic>)['name'];
       final newProduct = BookModel(
         id: name,
@@ -92,7 +81,7 @@ class BookProvider with ChangeNotifier {
         description: book.description,
         price: book.price,
         imageUrl: book.imageUrl,
-        authorId: book.authorId,
+        authorId: _userId.toString(),
         rating: book.rating,
       );
       _list.add(newProduct);
