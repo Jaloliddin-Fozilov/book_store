@@ -35,7 +35,7 @@ class _SignScreenState extends State<SignScreen> {
   };
 
   var _author = AuthorModel(
-    id: '',
+    id: Auth().userId!,
     name: '',
     imageUrl: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
     email: '',

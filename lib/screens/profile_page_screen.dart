@@ -8,12 +8,12 @@ import '../widgets/profile_follower.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
     Key? key,
-    required this.authorId,
   }) : super(key: key);
-  final String authorId;
   @override
   Widget build(BuildContext context) {
-    final author = Provider.of<AuthorProvider>(context).findById(authorId);
+    Provider.of<AuthorProvider>(context).getAuthorsFromFirebase();
+    final author =
+        Provider.of<AuthorProvider>(context).findByEmail('test@gmail.com');
     return Column(
       children: [
         Stack(

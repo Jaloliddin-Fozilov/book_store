@@ -8,40 +8,65 @@ import '../services/http_expection.dart';
 import '../models/author_model.dart';
 
 class AuthorProvider with ChangeNotifier {
-  String? _authToken;
-  String? _userId;
-
-  void setParams(String? authToken, String? userId) {
-    _authToken = authToken;
-    _userId = userId;
-  }
+  String thisId = '';
 
   List<AuthorModel> _list = [
-    AuthorModel(
-      id: '1',
-      name: 'Admin12',
-      imageUrl:
-          'https://images.unsplash.com/photo-1526656001029-20a71b17f7ba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
-      email: 'test@gmail.com',
-      followers: 465,
-      following: 4,
-    ),
+    // AuthorModel(
+    //   id: '1',
+    //   name: 'Admin12',
+    //   imageUrl:
+    //       'https://images.unsplash.com/photo-1526656001029-20a71b17f7ba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
+    //   email: 'test@gmail.com',
+    //   followers: 465,
+    //   following: 4,
+    // ),
   ];
   List<AuthorModel> get list {
     return [..._list];
   }
 
-  Future<void> addAuthor(AuthorModel author) async {
-    print('$author ppppppppppppppp');
+  Future<void> getAuthorsFromFirebase() async {
     final url = Uri.parse(
-        'https://book-store-marketplace-default-rtdb.firebaseio.com/authors.json?auth=$_authToken');
+        'https://online-shop-flutter-lessons-default-rtdb.firebaseio.com/authors.json');
+    try {
+      final response = await http.get(url);
+      if (jsonDecode(response.body) != null) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final List<AuthorModel> loadedAuthors = [];
+        data.forEach(
+          (authorId, authorData) {
+            loadedAuthors.add(
+              AuthorModel(
+                id: authorId,
+                name: authorData['name'],
+                imageUrl: authorData['imageUrl'],
+                email: authorData['email'],
+                followers: int.parse(authorData['followers']),
+                following: int.parse(authorData['following']),
+              ),
+            );
+          },
+        );
+
+        _list = loadedAuthors;
+        notifyListeners();
+        print(_list[0]);
+      }
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> addAuthor(AuthorModel author) async {
+    final url = Uri.parse(
+        'https://book-store-marketplace-default-rtdb.firebaseio.com/authors.json');
 
     try {
       final response = await http.post(
         url,
         body: jsonEncode(
           {
-            'id': author.id,
             'name': author.name,
             'imageUrl': author.imageUrl,
             'email': author.email,
@@ -50,17 +75,18 @@ class AuthorProvider with ChangeNotifier {
           },
         ),
       );
-      print(response.body);
+      final authorIdFromFirebase =
+          (jsonDecode(response.body) as Map<String, dynamic>)['name'];
       final newAuthor = AuthorModel(
-        id: author.id,
+        id: authorIdFromFirebase,
         name: author.name,
         imageUrl: author.imageUrl,
         email: author.email,
         followers: author.followers,
         following: author.following,
       );
+      print('${_list[0].email} auth ishladi');
       _list.add(newAuthor);
-      print('$_list llllllllllllllllllllll');
       notifyListeners();
     } catch (error) {
       print(error);
@@ -69,6 +95,11 @@ class AuthorProvider with ChangeNotifier {
   }
 
   AuthorModel findById(String id) {
+    print('$id ishladi');
     return _list.firstWhere((author) => author.id == id);
+  }
+
+  AuthorModel findByEmail(String email) {
+    return _list.firstWhere((author) => author.email == email);
   }
 }
