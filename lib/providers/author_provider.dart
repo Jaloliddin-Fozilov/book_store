@@ -8,8 +8,6 @@ import '../services/http_expection.dart';
 import '../models/author_model.dart';
 
 class AuthorProvider with ChangeNotifier {
-  String thisId = '';
-
   List<AuthorModel> _list = [
     // AuthorModel(
     //   id: '1',
@@ -67,6 +65,7 @@ class AuthorProvider with ChangeNotifier {
         url,
         body: jsonEncode(
           {
+            'id': author.id,
             'name': author.name,
             'imageUrl': author.imageUrl,
             'email': author.email,
@@ -85,7 +84,6 @@ class AuthorProvider with ChangeNotifier {
         followers: author.followers,
         following: author.following,
       );
-      print('${_list[0].email} auth ishladi');
       _list.add(newAuthor);
       notifyListeners();
     } catch (error) {
@@ -95,11 +93,6 @@ class AuthorProvider with ChangeNotifier {
   }
 
   AuthorModel findById(String id) {
-    print('$id ishladi');
     return _list.firstWhere((author) => author.id == id);
-  }
-
-  AuthorModel findByEmail(String email) {
-    return _list.firstWhere((author) => author.email == email);
   }
 }

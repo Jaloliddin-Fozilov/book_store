@@ -35,7 +35,7 @@ class _SignScreenState extends State<SignScreen> {
   };
 
   var _author = AuthorModel(
-    id: Auth().userId!,
+    id: '',
     name: '',
     imageUrl: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
     email: '',
@@ -143,22 +143,24 @@ class _SignScreenState extends State<SignScreen> {
           });
         } else {
           //  register user
-          _author = AuthorModel(
-            id: _author.id,
-            name: _authData['name']!,
-            imageUrl: _author.imageUrl,
-            email: _authData['email']!,
-            followers: random.nextInt(999),
-            following: random.nextInt(999),
-          );
 
-          await Provider.of<Auth>(context, listen: false).signup(
+          await Provider.of<Auth>(context, listen: false)
+              .signup(
             _authData['email']!,
             _authData['password']!,
-          );
-
-          await Provider.of<AuthorProvider>(context, listen: false)
-              .addAuthor(_author);
+          )
+              .then((_) {
+            _author = AuthorModel(
+              id: Provider.of<Auth>(context, listen: false).userId!,
+              name: _authData['name']!,
+              imageUrl: _author.imageUrl,
+              email: _authData['email']!,
+              followers: random.nextInt(999),
+              following: random.nextInt(999),
+            );
+            Provider.of<AuthorProvider>(context, listen: false)
+                .addAuthor(_author);
+          });
 
           setState(() {
             _loading = false;
