@@ -14,12 +14,12 @@ class Profile extends StatelessWidget {
     return Consumer<Auth>(
       builder: (ctx, authdata, child) {
         return authdata.isAuth
-            ? const ProfileScreen()
+            ? ProfileScreen(userId: authdata.userId!)
             : FutureBuilder(
                 future: authdata.autoLogin(),
                 builder: (c, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const ProfileScreen();
+                    return ProfileScreen(userId: authdata.userId!);
                   } else {
                     return const SignScreen();
                   }
