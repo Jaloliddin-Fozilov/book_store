@@ -8,6 +8,13 @@ import '../services/http_expection.dart';
 import '../models/author_model.dart';
 
 class AuthorProvider with ChangeNotifier {
+  String? _authToken;
+  String? _userId;
+  void setParams(String? authToken, String? userId) {
+    _authToken = authToken;
+    _userId = userId;
+  }
+
   List<AuthorModel> _list = [
     // AuthorModel(
     //   id: '1',
@@ -25,17 +32,19 @@ class AuthorProvider with ChangeNotifier {
 
   Future<void> getAuthorsFromFirebase() async {
     final url = Uri.parse(
-        'https://online-shop-flutter-lessons-default-rtdb.firebaseio.com/authors.json');
+        'https://book-store-marketplace-default-rtdb.firebaseio.com/authors.json?auth=$_authToken');
     try {
       final response = await http.get(url);
       if (jsonDecode(response.body) != null) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
         final List<AuthorModel> loadedAuthors = [];
+        print('data $data');
         data.forEach(
           (authorId, authorData) {
+            print('add userid ${authorData['id']}');
             loadedAuthors.add(
               AuthorModel(
-                id: authorId,
+                id: authorData['id'],
                 name: authorData['name'],
                 imageUrl: authorData['imageUrl'],
                 email: authorData['email'],
@@ -48,7 +57,6 @@ class AuthorProvider with ChangeNotifier {
 
         _list = loadedAuthors;
         notifyListeners();
-        print(_list[0]);
       }
     } catch (e) {
       print(e.toString());
@@ -58,7 +66,7 @@ class AuthorProvider with ChangeNotifier {
 
   Future<void> addAuthor(AuthorModel author) async {
     final url = Uri.parse(
-        'https://book-store-marketplace-default-rtdb.firebaseio.com/authors.json');
+        'https://book-1store-marketplace-default-rtdb.firebaseio.com/authors.json?auth=$_authToken');
 
     try {
       final response = await http.post(
