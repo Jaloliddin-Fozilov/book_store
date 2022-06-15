@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/author_provider.dart';
-import '../providers/auth.dart';
 
 import '../widgets/profile_follower.dart';
 
@@ -14,7 +13,6 @@ class ProfileScreen extends StatelessWidget {
   final String userId;
   @override
   Widget build(BuildContext context) {
-    print('User id $userId');
     Provider.of<AuthorProvider>(context, listen: false)
         .getAuthorsFromFirebase();
     final author = Provider.of<AuthorProvider>(context).findById(userId);

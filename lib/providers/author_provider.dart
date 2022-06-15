@@ -38,18 +38,16 @@ class AuthorProvider with ChangeNotifier {
       if (jsonDecode(response.body) != null) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
         final List<AuthorModel> loadedAuthors = [];
-        print('data $data');
         data.forEach(
           (authorId, authorData) {
-            print('add userid ${authorData['id']}');
             loadedAuthors.add(
               AuthorModel(
                 id: authorData['id'],
                 name: authorData['name'],
                 imageUrl: authorData['imageUrl'],
                 email: authorData['email'],
-                followers: int.parse(authorData['followers']),
-                following: int.parse(authorData['following']),
+                followers: authorData['followers'],
+                following: authorData['following'],
               ),
             );
           },
@@ -82,6 +80,7 @@ class AuthorProvider with ChangeNotifier {
           },
         ),
       );
+      print("author provider ${response.body}");
       final authorIdFromFirebase =
           (jsonDecode(response.body) as Map<String, dynamic>)['name'];
       final newAuthor = AuthorModel(

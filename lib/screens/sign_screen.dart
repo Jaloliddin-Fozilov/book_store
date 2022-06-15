@@ -144,23 +144,20 @@ class _SignScreenState extends State<SignScreen> {
         } else {
           //  register user
 
-          await Provider.of<Auth>(context, listen: false)
-              .signup(
+          await Provider.of<Auth>(context, listen: false).signup(
             _authData['email']!,
             _authData['password']!,
-          )
-              .then((_) {
-            _author = AuthorModel(
-              id: Provider.of<Auth>(context, listen: false).userId!,
-              name: _authData['name']!,
-              imageUrl: _author.imageUrl,
-              email: _authData['email']!,
-              followers: random.nextInt(999),
-              following: random.nextInt(999),
-            );
-            Provider.of<AuthorProvider>(context, listen: false)
-                .addAuthor(_author);
-          });
+          );
+          _author = AuthorModel(
+            id: Provider.of<Auth>(context, listen: false).userId!,
+            name: _authData['name']!,
+            imageUrl: _author.imageUrl,
+            email: _authData['email']!,
+            followers: random.nextInt(999),
+            following: random.nextInt(999),
+          );
+          await Provider.of<AuthorProvider>(context, listen: false)
+              .addAuthor(_author);
 
           setState(() {
             _loading = false;
