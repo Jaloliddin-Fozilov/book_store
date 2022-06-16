@@ -64,7 +64,7 @@ class AuthorProvider with ChangeNotifier {
 
   Future<void> addAuthor(AuthorModel author) async {
     final url = Uri.parse(
-        'https://book-1store-marketplace-default-rtdb.firebaseio.com/authors.json?auth=$_authToken');
+        'https://book-store-marketplace-default-rtdb.firebaseio.com/authors.json?auth=$_authToken');
 
     try {
       final response = await http.post(

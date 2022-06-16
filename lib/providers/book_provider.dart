@@ -21,11 +21,9 @@ class BookProvider with ChangeNotifier {
     return [..._list];
   }
 
-  Future<void> getProductsFromFirebase([bool filterByUser = false]) async {
-    final filterString =
-        filterByUser ? 'orderBy="authorId"&equalTo="$_userId"' : '';
+  Future<void> getProductsFromFirebase() async {
     final url = Uri.parse(
-        'https://book-store-marketplace-default-rtdb.firebaseio.com/products.json?auth=$_authToken&$filterString');
+        'https://book-store-marketplace-default-rtdb.firebaseio.com/products.json?auth=$_authToken');
     try {
       final response = await http.get(url);
       if (jsonDecode(response.body) != null) {
@@ -41,7 +39,8 @@ class BookProvider with ChangeNotifier {
                 price: double.parse(productData['price'].toString()),
                 imageUrl: productData['imageUrl'],
                 authorId: productData['authorId'],
-                rating: int.parse(productData['rating']),
+                rating: int.parse(productData['rating'].toString()),
+                views: int.parse(productData['views'].toString()),
               ),
             );
           },
@@ -71,6 +70,7 @@ class BookProvider with ChangeNotifier {
             'imageUrl': book.imageUrl,
             'authorId': _userId.toString(),
             'rating': book.rating,
+            'views': 0,
           },
         ),
       );
@@ -83,6 +83,7 @@ class BookProvider with ChangeNotifier {
         imageUrl: book.imageUrl,
         authorId: _userId.toString(),
         rating: book.rating,
+        views: 0,
       );
       _list.add(newProduct);
       notifyListeners();
@@ -108,6 +109,31 @@ class BookProvider with ChangeNotifier {
               'price': updatedProduct.price,
               'imageUrl': updatedProduct.imageUrl,
               'rating': updatedProduct.rating,
+              'views': updatedProduct.views,
+            },
+          ),
+        );
+
+        _list[productIndex] = updatedProduct;
+        notifyListeners();
+      } catch (e) {
+        rethrow;
+      }
+    }
+  }
+
+  Future<void> updateViews(BookModel updatedProduct) async {
+    final productIndex =
+        _list.indexWhere((books) => books.id == updatedProduct.id);
+    if (productIndex >= 0) {
+      final url = Uri.parse(
+          'https://book-store-marketplace-default-rtdb.firebaseio.com/products/${updatedProduct.id}.json?auth=$_authToken');
+      try {
+        await http.patch(
+          url,
+          body: jsonEncode(
+            {
+              'views': updatedProduct.views + 1,
             },
           ),
         );

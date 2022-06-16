@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/book_provider.dart';
+import '../providers/auth.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -10,7 +11,8 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final books = Provider.of<BookProvider>(context).authorBook('1');
+    final books = Provider.of<BookProvider>(context).authorBook(
+        Provider.of<Auth>(context, listen: false).userId.toString());
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

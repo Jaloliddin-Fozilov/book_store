@@ -19,6 +19,7 @@ class BookDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final book = Provider.of<BookProvider>(context).findById(id);
+    Provider.of<BookProvider>(context).updateViews(book);
     final books = Provider.of<BookProvider>(context);
     final author = Provider.of<AuthorProvider>(context).findById(book.authorId);
     final cart = Provider.of<CartProvider>(context, listen: false);
@@ -128,7 +129,7 @@ class BookDetailPage extends StatelessWidget {
                                         Text(
                                           book.views.toString(),
                                           style: const TextStyle(
-                                            fontSize: 20,
+                                            fontSize: 18,
                                             color: Color(0xFF6e57d8),
                                           ),
                                         ),
@@ -169,7 +170,7 @@ class BookDetailPage extends StatelessWidget {
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     'Buy for \$${book.price}',
-                                    style: const TextStyle(fontSize: 18),
+                                    style: const TextStyle(fontSize: 16),
                                   )),
                               style: ButtonStyle(
                                 shape: MaterialStateProperty.all<
