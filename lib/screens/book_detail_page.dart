@@ -21,9 +21,10 @@ class BookDetailPage extends StatelessWidget {
     final book = Provider.of<BookProvider>(context).findById(id);
     Provider.of<BookProvider>(context).updateViews(book);
     final books = Provider.of<BookProvider>(context);
+    Provider.of<AuthorProvider>(context).getAuthorsFromFirebase();
     final author = Provider.of<AuthorProvider>(context).findById(book.authorId);
     final cart = Provider.of<CartProvider>(context, listen: false);
-    final auth = Provider.of<Auth>(context);
+    final auth = Provider.of<Auth>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -233,7 +234,7 @@ class BookDetailPage extends StatelessWidget {
                           )
                         ],
                       ),
-                      const SizedBox(width: 30),
+                      const SizedBox(width: 5),
                       Expanded(
                         child: Column(
                           children: [

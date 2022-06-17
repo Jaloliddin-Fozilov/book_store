@@ -13,8 +13,7 @@ class ProfileScreen extends StatelessWidget {
   final String userId;
   @override
   Widget build(BuildContext context) {
-    Provider.of<AuthorProvider>(context, listen: false)
-        .getAuthorsFromFirebase();
+    Provider.of<AuthorProvider>(context).getAuthorsFromFirebase();
     final author = Provider.of<AuthorProvider>(context).findById(userId);
     return Column(
       children: [

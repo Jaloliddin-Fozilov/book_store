@@ -13,6 +13,7 @@ class HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<BookProvider>(context).getProductsFromFirebase();
     final book = Provider.of<BookProvider>(context);
     return SingleChildScrollView(
       child: Column(
