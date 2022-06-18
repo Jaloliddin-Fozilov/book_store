@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../services/http_expection.dart';
-
 import '../models/author_model.dart';
 
 class AuthorProvider with ChangeNotifier {
@@ -80,7 +78,7 @@ class AuthorProvider with ChangeNotifier {
           },
         ),
       );
-      print("author provider ${response.body}");
+      print('add not working ${response.body}');
       final authorIdFromFirebase =
           (jsonDecode(response.body) as Map<String, dynamic>)['name'];
       final newAuthor = AuthorModel(

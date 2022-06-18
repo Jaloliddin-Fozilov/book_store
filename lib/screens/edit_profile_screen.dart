@@ -7,6 +7,10 @@ class EditProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Scaffold(
+      body: Center(
+        child: Text('Coming soon...'),
+      ),
+    );
   }
 }

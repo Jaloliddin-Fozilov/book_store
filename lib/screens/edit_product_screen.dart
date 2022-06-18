@@ -287,7 +287,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       TextFormField(
                         initialValue: _product.rating == 0
                             ? ''
-                            : _product.price.toStringAsFixed(2),
+                            : _product.rating.toString(),
                         decoration: const InputDecoration(
                           labelText: 'Reyting',
                           border: OutlineInputBorder(),
